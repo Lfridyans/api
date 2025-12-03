@@ -67,22 +67,9 @@ const ChartSection: React.FC<ChartSectionProps> = ({
         );
         setKesimpulan(result);
         
-        // Simpan ke JSON file
-        const { updateKesimpulanForFile } = await import('../services/fileStorageService');
-        // Ambil filename dari file terbaru
-        try {
-          const fileListResponse = await fetch('/api/list-files');
-          if (fileListResponse.ok) {
-            const fileListData = await fileListResponse.json();
-            if (fileListData.success && fileListData.files && fileListData.files.length > 0) {
-              const latestFilename = fileListData.files[0].name;
-              // Update kesimpulan di file (akan generate ulang berdasarkan trafficType)
-              await updateKesimpulanForFile(latestFilename, trafficType);
-            }
-          }
-        } catch (fileError) {
-          console.warn('Gagal menyimpan kesimpulan ke file:', fileError);
-        }
+        // Di GitHub Pages, tidak bisa update file (read-only static assets)
+        // Kesimpulan hanya ditampilkan, tidak disimpan
+        console.log('ℹ️ Kesimpulan tidak bisa di-update di static assets (GitHub Pages)');
       } catch (error) {
         console.error('Error loading/generating kesimpulan:', error);
         setKesimpulan('');

@@ -472,93 +472,92 @@ export const getBatchPredictions = async (filters?: {
 }): Promise<StoredBatchPrediction[]> => {
   await initDatabase();
   
-  // Load langsung dari file terbaru di folder data/predictions/
+  // Load langsung dari static assets di GitHub Pages
   try {
-    const response = await fetch('/api/list-files');
-    if (response.ok) {
-      const data = await response.json();
-      if (data.success && data.files && data.files.length > 0) {
-        // Ambil file terbaru
-        const latestFile = data.files[0];
-        const fileResponse = await fetch(`/data/predictions/${latestFile.name}`);
-        if (fileResponse.ok) {
-          const jsonText = await fileResponse.text();
-          // Parse langsung dari file (tidak perlu importDataFromJSON)
-          const parsedData = JSON.parse(jsonText);
+    // Import static assets helper
+    const { getAvailablePredictionFiles, loadPredictionFile } = await import('../utils/staticAssets');
+    
+    // Get list of available files
+    const files = await getAvailablePredictionFiles();
+    
+    if (files && files.length > 0) {
+      // Ambil file terbaru (first file)
+      const latestFile = files[0];
+      
+      // Load file dari static assets
+      const parsedData = await loadPredictionFile(latestFile.name);
           
-          // Handle format baru: { predictions: [...], kesimpulan: "...", metadata: {...} }
-          let predictionsArray: any[] = [];
-          if (parsedData.predictions && Array.isArray(parsedData.predictions)) {
-            // Format baru dengan kesimpulan
-            predictionsArray = parsedData.predictions;
-            // Simpan kesimpulan ke sessionStorage untuk akses cepat
-            if (parsedData.kesimpulan) {
-              try {
-                sessionStorage.setItem('latest_kesimpulan', parsedData.kesimpulan);
-              } catch (e) {
-                console.warn('Failed to save kesimpulan to sessionStorage:', e);
-              }
-            }
-          } else if (Array.isArray(parsedData) && parsedData.length > 0 && parsedData[0].predictedValue !== undefined) {
-            // Format lama (array langsung)
-            predictionsArray = parsedData;
-          }
-          
-          if (predictionsArray.length > 0) {
-            // Group predictions by trafficType
-            const predictionsByType = new Map<TrafficType, typeof predictionsArray>();
-            predictionsArray.forEach((pred: any) => {
-              const trafficType = (pred.requestType || TrafficType.PASSENGER) as TrafficType;
-              if (!predictionsByType.has(trafficType)) {
-                predictionsByType.set(trafficType, []);
-              }
-              predictionsByType.get(trafficType)!.push(pred);
-            });
-            
-            // Convert ke StoredBatchPrediction format
-            const batches: StoredBatchPrediction[] = Array.from(predictionsByType.entries()).map(([trafficType, predictions]) => {
-              const firstPred = predictions[0];
-              const airportCode = (firstPred.airportCode || 'ALL') as AirportCode;
-              const scenario = firstPred.requestScenario || 'AUTO';
-              
-              return {
-                id: generateId(),
-                batchId: `${airportCode}_${trafficType}_${scenario}_${Date.now()}`,
-                airportCode,
-                trafficType,
-                scenario,
-                generatedAt: firstPred.savedAt || new Date().toISOString(),
-                savedAt: new Date().toISOString(),
-                predictions: predictions.map((pred: any) => ({
-                  ...pred,
-                  id: pred.id || generateId(),
-                  savedAt: pred.savedAt || new Date().toISOString(),
-                  requestType: trafficType,
-                  requestScenario: pred.requestScenario || scenario,
-                })),
-              };
-            });
-            
-            // Apply filters
-            let filteredBatches = batches;
-            if (filters?.airportCode) {
-              filteredBatches = filteredBatches.filter((b) => b.airportCode === filters.airportCode);
-            }
-            if (filters?.trafficType) {
-              filteredBatches = filteredBatches.filter((b) => b.trafficType === filters.trafficType);
-            }
-            if (filters?.scenario) {
-              filteredBatches = filteredBatches.filter((b) => b.scenario === filters.scenario);
-            }
-            
-            filteredBatches.sort((a, b) => b.generatedAt.localeCompare(a.generatedAt));
-            return filteredBatches;
+      // Handle format baru: { predictions: [...], kesimpulan: "...", metadata: {...} }
+      let predictionsArray: any[] = [];
+      if (parsedData.predictions && Array.isArray(parsedData.predictions)) {
+        // Format baru dengan kesimpulan
+        predictionsArray = parsedData.predictions;
+        // Simpan kesimpulan ke sessionStorage untuk akses cepat
+        if (parsedData.kesimpulan) {
+          try {
+            sessionStorage.setItem('latest_kesimpulan', parsedData.kesimpulan);
+          } catch (e) {
+            console.warn('Failed to save kesimpulan to sessionStorage:', e);
           }
         }
+      } else if (Array.isArray(parsedData) && parsedData.length > 0 && parsedData[0].predictedValue !== undefined) {
+        // Format lama (array langsung)
+        predictionsArray = parsedData;
+      }
+      
+      if (predictionsArray.length > 0) {
+        // Group predictions by trafficType
+        const predictionsByType = new Map<TrafficType, typeof predictionsArray>();
+        predictionsArray.forEach((pred: any) => {
+          const trafficType = (pred.requestType || TrafficType.PASSENGER) as TrafficType;
+          if (!predictionsByType.has(trafficType)) {
+            predictionsByType.set(trafficType, []);
+          }
+          predictionsByType.get(trafficType)!.push(pred);
+        });
+        
+        // Convert ke StoredBatchPrediction format
+        const batches: StoredBatchPrediction[] = Array.from(predictionsByType.entries()).map(([trafficType, predictions]) => {
+          const firstPred = predictions[0];
+          const airportCode = (firstPred.airportCode || 'ALL') as AirportCode;
+          const scenario = firstPred.requestScenario || 'AUTO';
+          
+          return {
+            id: generateId(),
+            batchId: `${airportCode}_${trafficType}_${scenario}_${Date.now()}`,
+            airportCode,
+            trafficType,
+            scenario,
+            generatedAt: firstPred.savedAt || new Date().toISOString(),
+            savedAt: new Date().toISOString(),
+            predictions: predictions.map((pred: any) => ({
+              ...pred,
+              id: pred.id || generateId(),
+              savedAt: pred.savedAt || new Date().toISOString(),
+              requestType: trafficType,
+              requestScenario: pred.requestScenario || scenario,
+            })),
+          };
+        });
+        
+        // Apply filters
+        let filteredBatches = batches;
+        if (filters?.airportCode) {
+          filteredBatches = filteredBatches.filter((b) => b.airportCode === filters.airportCode);
+        }
+        if (filters?.trafficType) {
+          filteredBatches = filteredBatches.filter((b) => b.trafficType === filters.trafficType);
+        }
+        if (filters?.scenario) {
+          filteredBatches = filteredBatches.filter((b) => b.scenario === filters.scenario);
+        }
+        
+        filteredBatches.sort((a, b) => b.generatedAt.localeCompare(a.generatedAt));
+        return filteredBatches;
       }
     }
   } catch (error) {
-    console.warn('⚠️ Failed to load batch predictions from file:', error);
+    console.warn('⚠️ Failed to load batch predictions from static assets:', error);
   }
   
   // Return empty jika tidak ada file atau error
@@ -896,35 +895,22 @@ export const cleanOldFileMetadata = (): void => {
 };
 
 /**
- * Load file by name from saved files (fetch dari folder data/predictions/)
+ * Load file by name from saved files (fetch dari static assets)
  */
 export const loadFileByName = async (
   filename: string
 ): Promise<{ predictionsCount: number; batchesCount: number }> => {
   try {
-    const filesList = getSavedFilesList();
-    const fileData = filesList.find(f => f.name === filename);
+    // Load dari static assets
+    const { loadPredictionFile } = await import('../utils/staticAssets');
+    const parsedData = await loadPredictionFile(filename);
     
-    if (!fileData) {
-      throw new Error(`File ${filename} tidak ditemukan di metadata`);
-    }
-    
-    // Try to fetch file from data/predictions/ folder
-    try {
-      const response = await fetch(`/data/predictions/${filename}`);
-      if (response.ok) {
-        const jsonText = await response.text();
-        return await importDataFromJSON(jsonText);
-      }
-    } catch (fetchError) {
-      console.log(`File ${filename} tidak ditemukan di data/predictions/, perlu import manual`);
-    }
-    
-    // If file not found in folder, need to load from file picker
-    throw new Error(`File ${filename} tidak ditemukan di folder data/predictions/. Silakan import file manual.`);
+    // Convert to JSON string untuk importDataFromJSON
+    const jsonString = JSON.stringify(parsedData);
+    return await importDataFromJSON(jsonString);
   } catch (error) {
-    console.error('Failed to load file by name:', error);
-    throw error;
+    console.error(`Failed to load file ${filename} from static assets:`, error);
+    throw new Error(`File ${filename} tidak ditemukan. Silakan pastikan file sudah ter-include dalam build.`);
   }
 };
 
@@ -933,23 +919,18 @@ export const loadFileByName = async (
  */
 export const getKesimpulanFromFile = async (trafficType?: TrafficType): Promise<string> => {
   try {
-    // Load dari file terbaru
-    const response = await fetch('/api/list-files');
-    if (response.ok) {
-      const data = await response.json();
-      if (data.success && data.files && data.files.length > 0) {
-        const latestFile = data.files[0];
-        const fileResponse = await fetch(`/data/predictions/${latestFile.name}`);
-        if (fileResponse.ok) {
-          const jsonText = await fileResponse.text();
-          const parsedData = JSON.parse(jsonText);
-          
-          // Format baru: { predictions: [...], kesimpulan: "..." }
-          // Jika ada kesimpulan, return (tidak peduli trafficType karena kesimpulan sudah sesuai dengan data di file)
-          if (parsedData.kesimpulan && parsedData.kesimpulan.trim().length > 0) {
-            return parsedData.kesimpulan;
-          }
-        }
+    // Load dari static assets
+    const { getAvailablePredictionFiles, loadPredictionFile } = await import('../utils/staticAssets');
+    const files = await getAvailablePredictionFiles();
+    
+    if (files && files.length > 0) {
+      const latestFile = files[0];
+      const parsedData = await loadPredictionFile(latestFile.name);
+      
+      // Format baru: { predictions: [...], kesimpulan: "..." }
+      // Jika ada kesimpulan, return (tidak peduli trafficType karena kesimpulan sudah sesuai dengan data di file)
+      if (parsedData.kesimpulan && parsedData.kesimpulan.trim().length > 0) {
+        return parsedData.kesimpulan;
       }
     }
   } catch (error) {

@@ -4,6 +4,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { loadFileByName, getSavedFilesList, cleanOldFileMetadata } from '../services/fileStorageService';
+import { getAvailablePredictionFiles, loadPredictionFile } from '../utils/staticAssets';
 import { FileText, CheckCircle, AlertCircle, Loader2, ChevronDown, RefreshCw } from 'lucide-react';
 
 interface LoadJSONFileProps {
@@ -29,84 +30,63 @@ const LoadJSONFile: React.FC<LoadJSONFileProps> = ({ onLoadComplete }) => {
   // Auto-update kesimpulan untuk file terbaru jika belum ada
   const autoUpdateKesimpulan = async () => {
     try {
-      const response = await fetch('/api/list-files');
-      if (!response.ok) {
-        return;
-      }
-
-      const data = await response.json();
-      if (!data.success || !data.files || data.files.length === 0) {
+      const files = await getAvailablePredictionFiles();
+      if (!files || files.length === 0) {
         return;
       }
 
       // Ambil file terbaru
-      const latestFile = data.files[0];
+      const latestFile = files[0];
       if (latestFile && latestFile.name) {
         try {
           // Cek apakah file sudah punya kesimpulan
-          const fileResponse = await fetch(`/data/predictions/${latestFile.name}`);
-          if (fileResponse.ok) {
-            const jsonText = await fileResponse.text();
-            const parsedData = JSON.parse(jsonText);
-            
-            // Jika belum punya kesimpulan, update
-            if (!parsedData.kesimpulan || parsedData.kesimpulan.trim().length === 0) {
-              const { updateKesimpulanForFile } = await import('../services/fileStorageService');
-              await updateKesimpulanForFile(latestFile.name);
-              console.log(`✅ Kesimpulan berhasil di-generate untuk file: ${latestFile.name}`);
-            }
+          const parsedData = await loadPredictionFile(latestFile.name);
+          
+          // Jika belum punya kesimpulan, skip (tidak bisa update di static assets)
+          if (!parsedData.kesimpulan || parsedData.kesimpulan.trim().length === 0) {
+            console.log(`ℹ️ File ${latestFile.name} belum punya kesimpulan (tidak bisa update di static assets)`);
           }
         } catch (fileError) {
-          console.warn(`Gagal update kesimpulan untuk ${latestFile.name}:`, fileError);
+          console.warn(`Gagal load file ${latestFile.name}:`, fileError);
         }
       }
     } catch (error) {
-      console.log('ℹ️ Tidak bisa update kesimpulan:', error);
+      console.log('ℹ️ Tidak bisa load file:', error);
     }
   };
 
-  // Auto-load file dari folder data/predictions/ saat page load
+  // Auto-load file dari static assets saat page load
   const autoLoadFromFolder = async () => {
     try {
-      // Langsung scan folder dan ambil file terbaru
-      const response = await fetch('/api/list-files');
-      if (!response.ok) {
-        throw new Error('Failed to list files');
-      }
-
-      const data = await response.json();
-      if (!data.success || !data.files || data.files.length === 0) {
-        console.log('ℹ️ Tidak ada file JSON di folder data/predictions/');
+      // Load file terbaru dari static assets
+      const files = await getAvailablePredictionFiles();
+      if (!files || files.length === 0) {
+        console.log('ℹ️ Tidak ada file JSON di static assets');
         return;
       }
 
-      // Ambil file terbaru (sudah sorted by modified time)
-      const latestFile = data.files[0];
+      // Ambil file terbaru
+      const latestFile = files[0];
       
       if (latestFile && latestFile.name) {
         try {
-          const fileResponse = await fetch(`/data/predictions/${latestFile.name}`);
-          if (fileResponse.ok) {
-            const jsonText = await fileResponse.text();
-            
-            // Import data
-            const { importDataFromJSON } = await import('../services/fileStorageService');
-            const result = await importDataFromJSON(jsonText);
-            
-            // TIDAK lagi update metadata ke localStorage
-            // File list akan selalu di-load fresh dari /api/list-files
-            
-            // Auto-select file
-            setSelectedFile(latestFile.name);
-            refreshFileList();
-            
-            if (onLoadComplete) {
-              onLoadComplete(result);
-            }
-            
-            console.log(`✅ Auto-loaded file terbaru: ${latestFile.name} from data/predictions/`);
-            return; // Berhasil load
+          const parsedData = await loadPredictionFile(latestFile.name);
+          const jsonText = JSON.stringify(parsedData);
+          
+          // Import data
+          const { importDataFromJSON } = await import('../services/fileStorageService');
+          const result = await importDataFromJSON(jsonText);
+          
+          // Auto-select file
+          setSelectedFile(latestFile.name);
+          refreshFileList();
+          
+          if (onLoadComplete) {
+            onLoadComplete(result);
           }
+          
+          console.log(`✅ Auto-loaded file terbaru: ${latestFile.name} from static assets`);
+          return; // Berhasil load
         } catch (fileError) {
           console.error(`Gagal load file ${latestFile.name}:`, fileError);
         }
@@ -114,29 +94,24 @@ const LoadJSONFile: React.FC<LoadJSONFileProps> = ({ onLoadComplete }) => {
       
       console.log('ℹ️ Tidak ada file yang bisa di-load');
     } catch (error) {
-      console.log('ℹ️ Tidak bisa akses folder data/predictions/:', error);
+      console.log('ℹ️ Tidak bisa load dari static assets:', error);
     }
   };
 
   const refreshFileList = async () => {
-    // Load langsung dari folder, bukan dari localStorage
+    // Load dari static assets
     try {
-      const response = await fetch('/api/list-files');
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.files) {
-          const files = data.files.map((f: any) => ({
-            name: f.name,
-            type: 'all' as const,
-            savedAt: f.modified || new Date().toISOString(),
-          }));
-          setSavedFiles(files);
-          // Auto-select latest file if available
-          if (files.length > 0 && !selectedFile) {
-            setSelectedFile(files[0].name); // File sudah sorted by modified time (newest first)
-          }
-        } else {
-          setSavedFiles([]);
+      const files = await getAvailablePredictionFiles();
+      if (files && files.length > 0) {
+        const fileList = files.map((f) => ({
+          name: f.name,
+          type: 'all' as const,
+          savedAt: f.modified || new Date().toISOString(),
+        }));
+        setSavedFiles(fileList);
+        // Auto-select latest file if available
+        if (fileList.length > 0 && !selectedFile) {
+          setSelectedFile(fileList[0].name);
         }
       } else {
         setSavedFiles([]);
@@ -155,24 +130,11 @@ const LoadJSONFile: React.FC<LoadJSONFileProps> = ({ onLoadComplete }) => {
     setSuccess(null);
 
     try {
-      // Coba load dari folder dulu
-      let result;
-      try {
-        const response = await fetch(`/data/predictions/${filename}`);
-        if (response.ok) {
-          const jsonText = await response.text();
-          const { importDataFromJSON } = await import('../services/fileStorageService');
-          result = await importDataFromJSON(jsonText);
-          
-          // TIDAK lagi simpan content ke localStorage
-          // Hanya update metadata jika perlu
-        } else {
-          throw new Error('File not found in folder');
-        }
-      } catch (folderError) {
-        // Jika gagal dari folder, coba load dari metadata
-        result = await loadFileByName(filename);
-      }
+      // Load dari static assets
+      const parsedData = await loadPredictionFile(filename);
+      const jsonText = JSON.stringify(parsedData);
+      const { importDataFromJSON } = await import('../services/fileStorageService');
+      const result = await importDataFromJSON(jsonText);
       
       setSuccess(`Berhasil load ${result.predictionsCount} predictions dan ${result.batchesCount} batch predictions!`);
       refreshFileList();
