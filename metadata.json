@@ -1,0 +1,5 @@
+{
+  "name": "Nataru Traffic Predictor",
+  "description": "AI-powered prediction agent for Airport Passenger and Flight traffic during the Nataru 2025/2026 period based on historical prognosis data.",
+  "requestFramePermissions": []
+}
