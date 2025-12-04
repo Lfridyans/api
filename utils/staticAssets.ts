@@ -33,7 +33,13 @@ export const getStaticAssetPath = (path: string): string => {
   const base = getBasePath();
   // Remove leading slash jika ada
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  return `${base}/${cleanPath}`;
+  
+  // Handle base path
+  if (base) {
+    return `${base}/${cleanPath}`;
+  }
+  // Jika tidak ada base path (development), return dengan leading slash
+  return `/${cleanPath}`;
 };
 
 /**

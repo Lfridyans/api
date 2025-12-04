@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Maximize, Minimize } from 'lucide-react';
+import { getStaticAssetPath } from '../utils/staticAssets';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -54,12 +55,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex justify-between h-full items-center">
             <div className="flex items-center gap-3">
               <img 
-                src="/logo-di.PNG" 
+                src={getStaticAssetPath('logo-di.PNG')} 
                 alt="Logo DI" 
                 className="h-10 w-auto object-contain"
               />
               <img 
-                src="/logo.PNG" 
+                src={getStaticAssetPath('logo.PNG')} 
                 alt="Logo" 
                 className="h-10 w-auto object-contain"
               />
