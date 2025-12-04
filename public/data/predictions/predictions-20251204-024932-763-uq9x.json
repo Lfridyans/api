@@ -806,6 +806,8 @@
     }
   ],
   "kesimpulan": "Proyeksi penumpang 2025 tumbuh 4.14% dari 2024, dengan tingkat pemulihan mencapai 98.7% terhadap 2019. Ini menandakan pemulihan trafik yang sangat kuat dan hampir mencapai level normal sebelum pandemi.",
+  "kesimpulanPassenger": "Proyeksi penumpang 2025 tumbuh 4.14% dari 2024, dengan tingkat pemulihan mencapai 98.7% terhadap 2019. Ini menandakan pemulihan trafik yang sangat kuat dan hampir mencapai level normal sebelum pandemi.",
+  "kesimpulanFlight": "Proyeksi pesawat 2025 tumbuh 2.0% dari 2024, dengan tingkat pemulihan mencapai 95.1% terhadap 2019. Ini menunjukkan pemulihan trafik pesawat yang stabil meskipun masih di bawah level normal sebelum pandemi.",
   "metadata": {
     "airportCode": "ALL",
     "generatedAt": "2025-12-03T19:49:32.763Z",

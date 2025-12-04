@@ -927,8 +927,15 @@ export const getKesimpulanFromFile = async (trafficType?: TrafficType): Promise<
       const latestFile = files[0];
       const parsedData = await loadPredictionFile(latestFile.name);
       
-      // Format baru: { predictions: [...], kesimpulan: "..." }
-      // Jika ada kesimpulan, return (tidak peduli trafficType karena kesimpulan sudah sesuai dengan data di file)
+      // Format baru: { predictions: [...], kesimpulan: "...", kesimpulanPassenger: "...", kesimpulanFlight: "..." }
+      // Gunakan field yang sesuai dengan trafficType jika ada, fallback ke kesimpulan umum
+      if (trafficType === 'PASSENGER' && parsedData.kesimpulanPassenger && parsedData.kesimpulanPassenger.trim().length > 0) {
+        return parsedData.kesimpulanPassenger;
+      }
+      if (trafficType === 'FLIGHT' && parsedData.kesimpulanFlight && parsedData.kesimpulanFlight.trim().length > 0) {
+        return parsedData.kesimpulanFlight;
+      }
+      // Fallback ke kesimpulan umum jika field spesifik tidak ada
       if (parsedData.kesimpulan && parsedData.kesimpulan.trim().length > 0) {
         return parsedData.kesimpulan;
       }
