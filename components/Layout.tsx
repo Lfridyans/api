@@ -55,13 +55,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex justify-between h-full items-center">
             <div className="flex items-center gap-2">
               <img 
-                src={getStaticAssetPath('logo-di.PNG')} 
-                alt="Logo DI" 
-                className="h-8 w-auto object-contain"
-              />
-              <img 
-                src={getStaticAssetPath('logo.PNG')} 
-                alt="Logo" 
+                src={getStaticAssetPath('injourneyairports.png')} 
+                alt="InJourney Airports" 
                 className="h-8 w-auto object-contain"
               />
               <div className="flex flex-col">
