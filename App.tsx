@@ -504,47 +504,47 @@ const App: React.FC = () => {
         */}
         <aside className={`
             bg-white border-r border-slate-200 flex flex-col z-40 shadow-2xl md:shadow-[4px_0_24px_rgba(0,0,0,0.02)]
-            fixed md:static w-full md:w-80 
-            top-16 bottom-0 md:top-auto md:bottom-auto md:h-full
-            supports-[height:100dvh]:h-[calc(100dvh-4rem)] h-[calc(100vh-4rem)] md:h-auto
+            fixed md:static w-full md:w-[260px] 
+            top-14 bottom-0 md:top-auto md:bottom-auto md:h-full
+            supports-[height:100dvh]:h-[calc(100dvh-3.5rem)] h-[calc(100vh-3.5rem)] md:h-auto
             transition-transform duration-300 ease-in-out
             ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
         `}>
             
             {/* Main Navigation Menu (PRIORITIZED) */}
-            <div className="p-4 border-b border-slate-100 flex-none bg-white z-10">
+            <div className="p-3 border-b border-slate-100 flex-none bg-white z-10">
                <nav className="space-y-1">
                   <button 
                     onClick={() => { setActivePage('PREDICTOR'); setIsMobileMenuOpen(false); }}
-                    className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-bold transition-all ${
+                    className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs font-bold transition-all ${
                         activePage === 'PREDICTOR' 
                         ? 'bg-indigo-50 text-indigo-700' 
                         : 'text-slate-600 hover:bg-slate-50'
                     }`}
                   >
-                     <LineChart className="w-4 h-4" />
+                     <LineChart className="w-3.5 h-3.5" />
                      Analisis Prediksi
                   </button>
                   <button 
                     onClick={() => { setActivePage('EXECUTIVE'); setIsMobileMenuOpen(false); }}
-                    className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-bold transition-all ${
+                    className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs font-bold transition-all ${
                         activePage === 'EXECUTIVE' 
                         ? 'bg-indigo-50 text-indigo-700' 
                         : 'text-slate-600 hover:bg-slate-50'
                     }`}
                   >
-                     <LayoutDashboard className="w-4 h-4" />
+                     <LayoutDashboard className="w-3.5 h-3.5" />
                      Executive Report
                   </button>
                   <button 
                     onClick={() => { setActivePage('EVENT'); setIsMobileMenuOpen(false); }}
-                    className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-bold transition-all ${
+                    className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs font-bold transition-all ${
                         activePage === 'EVENT' 
                         ? 'bg-indigo-50 text-indigo-700' 
                         : 'text-slate-600 hover:bg-slate-50'
                     }`}
                   >
-                     <CalendarRange className="w-4 h-4" />
+                     <CalendarRange className="w-3.5 h-3.5" />
                      Event Intelligence
                   </button>
                </nav>
@@ -566,7 +566,7 @@ const App: React.FC = () => {
                     {/* Visual Separator for Mobile */}
                     <div className="h-2 bg-slate-50 border-b border-slate-100 flex-none md:hidden"></div>
                     
-                    <div className="p-6 pb-40 md:pb-6"> {/* Increased bottom padding for mobile scroll safety */}
+                    <div className="p-4 pb-32 md:pb-4"> {/* Increased bottom padding for mobile scroll safety */}
                         <LoadJSONFile onLoadComplete={async () => {
                             // Reload saved predictions setelah import
                             try {
@@ -606,20 +606,20 @@ const App: React.FC = () => {
                                 console.error('Failed to reload saved predictions:', error);
                             }
                         }} />
-                        <h2 className="font-bold text-xs text-slate-400 uppercase tracking-wider mb-5 flex items-center gap-2 mt-4">
-                        <Search className="w-3 h-3" />
+                        <h2 className="font-bold text-[10px] text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5 mt-2">
+                        <Search className="w-2.5 h-2.5" />
                         Parameter Prediksi
                         </h2>
                         
-                        <form onSubmit={handlePredict} className="space-y-5">
+                        <form onSubmit={handlePredict} className="space-y-3">
                         {/* Airport */}
                         <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Pilih Bandara</label>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Bandara</label>
                             <div className="relative">
                             <select
                                 value={selectedAirport}
                                 onChange={handleAirportChange}
-                                className="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-3 px-3 pr-8 rounded-lg text-sm leading-tight focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-medium"
+                                className="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 px-2.5 pr-8 rounded-lg text-xs leading-tight focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-medium"
                             >
                                 <option value="ALL">Seluruh Bandara</option>
                                 <option value="CGK">Soekarno-Hatta (CGK)</option>
@@ -634,42 +634,42 @@ const App: React.FC = () => {
                         
                         {/* Traffic Type */}
                         <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tipe Trafik</label>
-                            <div className="grid grid-cols-2 gap-2">
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Tipe Trafik</label>
+                            <div className="grid grid-cols-2 gap-1.5">
                             <button
                                 type="button"
                                 onClick={() => handleTypeChange(TrafficType.PASSENGER)}
-                                className={`flex flex-col items-center justify-center p-3 rounded-lg border transition-all ${
+                                className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${
                                 trafficType === TrafficType.PASSENGER 
                                     ? 'border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm' 
                                     : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-500'
                                 }`}
                             >
-                                <Users className="w-5 h-5 mb-1" />
-                                <span className="font-medium text-xs">Penumpang</span>
+                                <Users className="w-4 h-4 mb-0.5" />
+                                <span className="font-medium text-[10px]">Penumpang</span>
                             </button>
                             <button
                                 type="button"
                                 onClick={() => handleTypeChange(TrafficType.FLIGHT)}
-                                className={`flex flex-col items-center justify-center p-3 rounded-lg border transition-all ${
+                                className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${
                                 trafficType === TrafficType.FLIGHT 
                                     ? 'border-orange-500 bg-orange-50 text-orange-700 shadow-sm' 
                                     : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-500'
                                 }`}
                             >
-                                <Plane className="w-5 h-5 mb-1" />
-                                <span className="font-medium text-xs">Pesawat</span>
+                                <Plane className="w-4 h-4 mb-0.5" />
+                                <span className="font-medium text-[10px]">Pesawat</span>
                             </button>
                             </div>
                         </div>
 
                         {/* Info: Batch Prediction */}
-                        <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3">
-                            <div className="flex items-start gap-2">
-                                <Sparkles className="w-4 h-4 text-indigo-600 mt-0.5 flex-none" />
+                        <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-2.5">
+                            <div className="flex items-start gap-1.5">
+                                <Sparkles className="w-3.5 h-3.5 text-indigo-600 mt-0.5 flex-none" />
                                 <div>
-                                    <div className="text-xs font-bold text-indigo-800 mb-1">Prediksi Semua Tanggal</div>
-                                    <div className="text-[10px] text-indigo-700 leading-tight">
+                                    <div className="text-[10px] font-bold text-indigo-800 mb-0.5">Prediksi Semua Tanggal</div>
+                                    <div className="text-[9px] text-indigo-700 leading-tight">
                                         Sistem akan memprediksi semua tanggal periode Nataru (18 Des 2025 - 4 Jan 2026) sekaligus dalam sekali prediksi.
                                     </div>
                                 </div>
@@ -677,16 +677,16 @@ const App: React.FC = () => {
                         </div>
 
                         {/* AGENTIC FEATURE: SCENARIO SIMULATION */}
-                        <div className="pt-2 border-t border-dashed border-slate-200">
-                            <label className="flex items-center gap-1 text-xs font-bold text-indigo-600 uppercase tracking-wider mb-2">
-                                <Bot className="w-3 h-3" />
+                        <div className="pt-1.5 border-t border-dashed border-slate-200">
+                            <label className="flex items-center gap-1 text-[10px] font-bold text-indigo-600 uppercase tracking-wider mb-1.5">
+                                <Bot className="w-2.5 h-2.5" />
                                 Mode Agen (Otonom)
                             </label>
                             <div className="relative">
                                 <select
                                     value={selectedScenario}
                                     onChange={handleScenarioChange}
-                                    className={`w-full appearance-none border text-sm py-3 px-3 pr-8 rounded-lg leading-tight focus:outline-none transition-all font-medium ${
+                                    className={`w-full appearance-none border text-xs py-2 px-2.5 pr-8 rounded-lg leading-tight focus:outline-none transition-all font-medium ${
                                         selectedScenario === 'AUTO' 
                                         ? 'bg-emerald-50 border-emerald-200 text-emerald-800 focus:ring-emerald-500' 
                                         : 'bg-indigo-50 border-indigo-200 text-indigo-800 focus:ring-indigo-500'
@@ -712,7 +712,7 @@ const App: React.FC = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`w-full flex justify-center py-3.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all mt-6 ${
+                            className={`w-full flex justify-center py-2.5 px-3 border border-transparent rounded-lg shadow-sm text-xs font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all mt-4 ${
                                 selectedScenario === 'AUTO' 
                                     ? 'bg-emerald-600 hover:bg-emerald-700' 
                                     : (selectedScenario !== 'Normal' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-slate-800 hover:bg-slate-900')
@@ -730,10 +730,10 @@ const App: React.FC = () => {
                         </form>
                     </div>
 
-                    <div className="mt-auto p-6 bg-slate-50 border-t border-slate-200 hidden md:block space-y-4">
+                    <div className="mt-auto p-4 bg-slate-50 border-t border-slate-200 hidden md:block space-y-3">
                         <div>
-                            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Informasi Penting</h4>
-                        <ul className="space-y-2 text-xs text-slate-600 font-medium">
+                            <h4 className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-2">Informasi Penting</h4>
+                        <ul className="space-y-1.5 text-[10px] text-slate-600 font-medium">
                             <li className="flex gap-2 items-center">
                                 <span className="w-2 h-2 rounded-full bg-red-500"></span>
                                 Puncak Dep: {currentStats.peakDeparture}

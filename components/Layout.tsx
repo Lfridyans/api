@@ -50,22 +50,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="h-screen supports-[height:100dvh]:h-[100dvh] bg-slate-50 text-slate-900 font-sans flex flex-col overflow-hidden">
       {/* Navbar */}
-      <nav className="bg-white border-b border-slate-200 h-16 flex-none z-50 shadow-sm">
-        <div className="w-full px-4 sm:px-6 lg:px-8 h-full">
+      <nav className="bg-white border-b border-slate-200 h-14 flex-none z-50 shadow-sm">
+        <div className="w-full px-3 sm:px-4 lg:px-6 h-full">
           <div className="flex justify-between h-full items-center">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <img 
                 src={getStaticAssetPath('logo-di.PNG')} 
                 alt="Logo DI" 
-                className="h-10 w-auto object-contain"
+                className="h-8 w-auto object-contain"
               />
               <img 
                 src={getStaticAssetPath('logo.PNG')} 
                 alt="Logo" 
-                className="h-10 w-auto object-contain"
+                className="h-8 w-auto object-contain"
               />
               <div className="flex flex-col">
-                <span className="text-[10px] text-slate-500 font-medium tracking-widest uppercase">InJourney Airports</span>
+                <span className="text-[9px] text-slate-500 font-medium tracking-widest uppercase">InJourney Airports</span>
               </div>
             </div>
             <div className="flex items-center gap-4">

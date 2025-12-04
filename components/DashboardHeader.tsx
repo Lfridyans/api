@@ -164,67 +164,67 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   const totalCards = baseCards + conditionalCards;
 
   return (
-    <div className="bg-white border-b border-slate-200 py-5 shadow-sm z-10 w-full">
-      <div className="flex flex-nowrap items-stretch gap-2 px-4 w-full">
+    <div className="bg-white border-b border-slate-200 py-3 shadow-sm z-10 w-full">
+      <div className="flex flex-nowrap items-stretch gap-1.5 px-3 w-full">
         {/* Card 1 */}
-        <div className="flex items-stretch gap-2 border-r border-slate-100 pr-2 flex-shrink-0 flex-1 min-w-0">
-          <div className="h-full w-1.5 bg-blue-500 rounded-full flex-shrink-0"></div>
-          <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-2.5">
-            <div className="min-h-[36px] flex items-center justify-center">
-              <p className="text-xs text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">Total Penumpang (Baseline 2024)</p>
+        <div className="flex items-stretch gap-1.5 border-r border-slate-100 pr-1.5 flex-shrink-0 flex-1 min-w-0">
+          <div className="h-full w-1 bg-blue-500 rounded-full flex-shrink-0"></div>
+          <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-1.5">
+            <div className="min-h-[28px] flex items-center justify-center">
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">Total Penumpang (Baseline 2024)</p>
             </div>
-            <div className="min-h-[28px] flex items-center justify-center mt-2">
-                <span className="text-lg font-bold text-slate-800">{stats.totalPassengers2024}</span>
+            <div className="min-h-[20px] flex items-center justify-center mt-1">
+                <span className="text-sm font-bold text-slate-800">{stats.totalPassengers2024}</span>
             </div>
-            <div className="min-h-[18px]"></div>
+            <div className="min-h-[14px]"></div>
           </div>
         </div>
 
         {/* Card 2 */}
-        <div className="flex items-stretch gap-2 border-r border-slate-100 pr-2 flex-shrink-0 flex-1 min-w-0">
-          <div className="h-full w-1.5 bg-orange-500 rounded-full flex-shrink-0"></div>
-          <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-2.5">
-            <div className="min-h-[36px] flex items-center justify-center">
-              <p className="text-xs text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">Total Pesawat (Baseline 2024)</p>
+        <div className="flex items-stretch gap-1.5 border-r border-slate-100 pr-1.5 flex-shrink-0 flex-1 min-w-0">
+          <div className="h-full w-1 bg-orange-500 rounded-full flex-shrink-0"></div>
+          <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-1.5">
+            <div className="min-h-[28px] flex items-center justify-center">
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">Total Pesawat (Baseline 2024)</p>
             </div>
-            <div className="min-h-[28px] flex items-center justify-center mt-2">
-                <span className="text-lg font-bold text-slate-800">{stats.totalFlights2024}</span>
+            <div className="min-h-[20px] flex items-center justify-center mt-1">
+                <span className="text-sm font-bold text-slate-800">{stats.totalFlights2024}</span>
             </div>
-            <div className="min-h-[18px]"></div>
+            <div className="min-h-[14px]"></div>
           </div>
         </div>
 
         {/* Card 3: Pemulihan (PAX) - SELALU DITAMPILKAN */}
-        <div className="flex items-stretch gap-2 border-r border-slate-100 pr-2 flex-shrink-0" style={{ flex: '0 1 135px' }}>
-          <div className="h-full w-1.5 bg-slate-300 rounded-full flex-shrink-0"></div>
-          <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-2.5">
-            <div className="min-h-[36px] flex items-center justify-center">
-              <p className="text-xs text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">Pemulihan (PAX)</p>
+        <div className="flex items-stretch gap-1.5 border-r border-slate-100 pr-1.5 flex-shrink-0" style={{ flex: '0 1 120px' }}>
+          <div className="h-full w-1 bg-slate-300 rounded-full flex-shrink-0"></div>
+          <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-1.5">
+            <div className="min-h-[28px] flex items-center justify-center">
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">Pemulihan (PAX)</p>
             </div>
-            <div className="min-h-[28px] flex items-center justify-center mt-2">
-              <span className="text-lg font-bold text-slate-800">{baselineRecoveryRate.toFixed(1)}%</span>
+            <div className="min-h-[20px] flex items-center justify-center mt-1">
+              <span className="text-sm font-bold text-slate-800">{baselineRecoveryRate.toFixed(1)}%</span>
             </div>
-            <div className="min-h-[18px] flex items-center justify-center">
-              <span className="text-[11px] text-slate-400">vs 2019</span>
+            <div className="min-h-[14px] flex items-center justify-center">
+              <span className="text-[10px] text-slate-400">vs 2019</span>
             </div>
           </div>
         </div>
 
         {/* Card 4: Total Prediksi Penumpang 2025 - DITAMPILKAN JIKA ADA DATA */}
         {passengerBatch && (
-          <div className={`flex items-stretch gap-2 border-r border-slate-100 pr-2 flex-shrink-0 flex-1 min-w-0 ${isSimulation ? 'bg-emerald-50' : 'bg-indigo-50'} rounded`}>
-            <div className={`h-full w-1.5 rounded-full flex-shrink-0 ${isSimulation ? 'bg-emerald-500' : 'bg-indigo-500'}`}></div>
-            <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-2.5">
-              <div className="min-h-[36px] flex items-center justify-center">
-                <p className={`text-xs uppercase font-bold tracking-tight leading-tight break-words whitespace-normal ${isSimulation ? 'text-emerald-600' : 'text-indigo-600'}`}>
+          <div className={`flex items-stretch gap-1.5 border-r border-slate-100 pr-1.5 flex-shrink-0 flex-1 min-w-0 ${isSimulation ? 'bg-emerald-50' : 'bg-indigo-50'} rounded`}>
+            <div className={`h-full w-1 rounded-full flex-shrink-0 ${isSimulation ? 'bg-emerald-500' : 'bg-indigo-500'}`}></div>
+            <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-1.5">
+              <div className="min-h-[28px] flex items-center justify-center">
+                <p className={`text-[10px] uppercase font-bold tracking-tight leading-tight break-words whitespace-normal ${isSimulation ? 'text-emerald-600' : 'text-indigo-600'}`}>
                   Total Prediksi Penumpang 2025
                 </p>
               </div>
-              <div className={`min-h-[28px] flex items-center justify-center mt-2 text-lg font-bold ${isSimulation ? 'text-emerald-700' : 'text-indigo-700'}`}>
+              <div className={`min-h-[20px] flex items-center justify-center mt-1 text-sm font-bold ${isSimulation ? 'text-emerald-700' : 'text-indigo-700'}`}>
                 {passengerForecastTotal.toLocaleString('id-ID')}
               </div>
-              <div className="min-h-[18px] flex items-center justify-center">
-                <p className="text-[11px] text-slate-500">
+              <div className="min-h-[14px] flex items-center justify-center">
+                <p className="text-[10px] text-slate-500">
                   {passengerBatch.predictions.length} tanggal
                 </p>
               </div>
@@ -234,19 +234,19 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
         {/* Card 5: Total Prediksi Pesawat 2025 - DITAMPILKAN JIKA ADA DATA */}
         {flightBatch && (
-          <div className="flex items-stretch gap-2 border-r border-slate-100 pr-2 flex-shrink-0 flex-1 min-w-0 bg-orange-50 rounded">
-            <div className="h-full w-1.5 rounded-full bg-orange-500 flex-shrink-0"></div>
-            <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-2.5">
-              <div className="min-h-[36px] flex items-center justify-center">
-                <p className="text-xs uppercase font-bold tracking-tight leading-tight break-words whitespace-normal text-orange-600">
+          <div className="flex items-stretch gap-1.5 border-r border-slate-100 pr-1.5 flex-shrink-0 flex-1 min-w-0 bg-orange-50 rounded">
+            <div className="h-full w-1 rounded-full bg-orange-500 flex-shrink-0"></div>
+            <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-1.5">
+              <div className="min-h-[28px] flex items-center justify-center">
+                <p className="text-[10px] uppercase font-bold tracking-tight leading-tight break-words whitespace-normal text-orange-600">
                   Total Prediksi Pesawat 2025
                 </p>
               </div>
-              <div className="min-h-[28px] flex items-center justify-center mt-2 text-lg font-bold text-orange-700">
+              <div className="min-h-[20px] flex items-center justify-center mt-1 text-sm font-bold text-orange-700">
                 {flightForecastTotal.toLocaleString('id-ID')}
               </div>
-              <div className="min-h-[18px] flex items-center justify-center">
-                <p className="text-[11px] text-slate-500">
+              <div className="min-h-[14px] flex items-center justify-center">
+                <p className="text-[10px] text-slate-500">
                   {flightBatch.predictions.length} tanggal
                 </p>
               </div>
@@ -256,17 +256,17 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
         {/* Card 6: Pemulihan Penumpang - DITAMPILKAN JIKA ADA DATA */}
         {passengerBatch && (
-          <div className="flex items-stretch gap-2 border-r border-slate-100 pr-2 flex-shrink-0" style={{ flex: '0 1 145px' }}>
-            <div className="h-full w-1.5 bg-slate-300 rounded-full flex-shrink-0"></div>
-            <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-2.5">
-              <div className="min-h-[36px] flex items-center justify-center">
-                <p className="text-xs text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">Pemulihan Penumpang</p>
+          <div className="flex items-stretch gap-1.5 border-r border-slate-100 pr-1.5 flex-shrink-0" style={{ flex: '0 1 120px' }}>
+            <div className="h-full w-1 bg-slate-300 rounded-full flex-shrink-0"></div>
+            <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-1.5">
+              <div className="min-h-[28px] flex items-center justify-center">
+                <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">Pemulihan Penumpang</p>
               </div>
-              <div className="min-h-[28px] flex items-center justify-center mt-2">
-                <span className="text-lg font-bold text-slate-800">{passengerRecoveryRate.toFixed(1)}%</span>
+              <div className="min-h-[20px] flex items-center justify-center mt-1">
+                <span className="text-sm font-bold text-slate-800">{passengerRecoveryRate.toFixed(1)}%</span>
               </div>
-              <div className="min-h-[18px] flex items-center justify-center">
-                <span className="text-[11px] text-slate-400">vs 2019</span>
+              <div className="min-h-[14px] flex items-center justify-center">
+                <span className="text-[10px] text-slate-400">vs 2019</span>
               </div>
             </div>
           </div>
@@ -274,35 +274,35 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
         {/* Card 7: Pertumbuhan Penumpang - DITAMPILKAN JIKA ADA DATA */}
         {passengerBatch && (
-          <div className="flex items-stretch gap-2 border-r border-slate-100 pr-2 flex-shrink-0" style={{ flex: '0 1 145px' }}>
-            <div className={`h-full w-1.5 rounded-full flex-shrink-0 ${passengerGrowth >= 0 ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
-            <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-2.5">
-              <div className="min-h-[36px] flex items-center justify-center">
-                <p className="text-xs text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">
+          <div className="flex items-stretch gap-1.5 border-r border-slate-100 pr-1.5 flex-shrink-0" style={{ flex: '0 1 120px' }}>
+            <div className={`h-full w-1 rounded-full flex-shrink-0 ${passengerGrowth >= 0 ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
+            <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-1.5">
+              <div className="min-h-[28px] flex items-center justify-center">
+                <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">
                   Pertumbuhan Penumpang
                 </p>
               </div>
-              <div className={`min-h-[28px] flex items-center justify-center mt-2 text-lg font-bold ${passengerGrowth >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+              <div className={`min-h-[20px] flex items-center justify-center mt-1 text-sm font-bold ${passengerGrowth >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
                 {passengerGrowth >= 0 ? '+' : ''}{passengerGrowth.toFixed(1)}%
               </div>
-              <div className="min-h-[18px]"></div>
+              <div className="min-h-[14px]"></div>
             </div>
           </div>
         )}
 
         {/* Card 8: Pemulihan Pesawat - DITAMPILKAN JIKA ADA DATA */}
         {flightBatch && (
-          <div className="flex items-stretch gap-2 border-r border-slate-100 pr-2 flex-shrink-0" style={{ flex: '0 1 145px' }}>
-            <div className="h-full w-1.5 bg-slate-300 rounded-full flex-shrink-0"></div>
-            <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-2.5">
-              <div className="min-h-[36px] flex items-center justify-center">
-                <p className="text-xs text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">Pemulihan Pesawat</p>
+          <div className="flex items-stretch gap-1.5 border-r border-slate-100 pr-1.5 flex-shrink-0" style={{ flex: '0 1 120px' }}>
+            <div className="h-full w-1 bg-slate-300 rounded-full flex-shrink-0"></div>
+            <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-1.5">
+              <div className="min-h-[28px] flex items-center justify-center">
+                <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">Pemulihan Pesawat</p>
               </div>
-              <div className="min-h-[28px] flex items-center justify-center mt-2">
-                <span className="text-lg font-bold text-slate-800">{flightRecoveryRate.toFixed(1)}%</span>
+              <div className="min-h-[20px] flex items-center justify-center mt-1">
+                <span className="text-sm font-bold text-slate-800">{flightRecoveryRate.toFixed(1)}%</span>
               </div>
-              <div className="min-h-[18px] flex items-center justify-center">
-                <span className="text-[11px] text-slate-400">vs 2019</span>
+              <div className="min-h-[14px] flex items-center justify-center">
+                <span className="text-[10px] text-slate-400">vs 2019</span>
               </div>
             </div>
           </div>
@@ -310,36 +310,36 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
         {/* Card 9: Pertumbuhan Pesawat - DITAMPILKAN JIKA ADA DATA */}
         {flightBatch && (
-          <div className="flex items-stretch gap-2 border-r border-slate-100 pr-2 flex-shrink-0" style={{ flex: '0 1 145px' }}>
-            <div className={`h-full w-1.5 rounded-full flex-shrink-0 ${flightGrowth >= 0 ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
-            <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-2.5">
-              <div className="min-h-[36px] flex items-center justify-center">
-                <p className="text-xs text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">
+          <div className="flex items-stretch gap-1.5 border-r border-slate-100 pr-1.5 flex-shrink-0" style={{ flex: '0 1 120px' }}>
+            <div className={`h-full w-1 rounded-full flex-shrink-0 ${flightGrowth >= 0 ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
+            <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-1.5">
+              <div className="min-h-[28px] flex items-center justify-center">
+                <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">
                   Pertumbuhan Pesawat
                 </p>
               </div>
-              <div className={`min-h-[28px] flex items-center justify-center mt-2 text-lg font-bold ${flightGrowth >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+              <div className={`min-h-[20px] flex items-center justify-center mt-1 text-sm font-bold ${flightGrowth >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
                 {flightGrowth >= 0 ? '+' : ''}{flightGrowth.toFixed(1)}%
               </div>
-              <div className="min-h-[18px]"></div>
+              <div className="min-h-[14px]"></div>
             </div>
           </div>
         )}
 
         {/* Card 10: Puncak Arus - Paling Kanan */}
-        <div className="flex items-stretch gap-2 pr-4 flex-shrink-0" style={{ flex: '0 1 155px' }}>
-          <div className="h-full w-1.5 bg-red-400 rounded-full flex-shrink-0"></div>
-          <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-2.5">
-             <div className="min-h-[36px] flex items-center justify-center">
-               <p className="text-xs text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">Puncak Arus</p>
+        <div className="flex items-stretch gap-1.5 pr-3 flex-shrink-0" style={{ flex: '0 1 130px' }}>
+          <div className="h-full w-1 bg-red-400 rounded-full flex-shrink-0"></div>
+          <div className="min-w-0 flex-1 text-center flex flex-col justify-center py-1.5">
+             <div className="min-h-[28px] flex items-center justify-center">
+               <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tight leading-tight break-words whitespace-normal">Puncak Arus</p>
              </div>
-             <div className="min-h-[28px] flex items-center justify-center mt-2">
-               <div className="flex flex-col gap-0.5 text-[11px] font-semibold">
+             <div className="min-h-[20px] flex items-center justify-center mt-1">
+               <div className="flex flex-col gap-0.5 text-[10px] font-semibold">
                   <span className="text-red-600">Berangkat: {stats.peakDeparture}</span>
                   <span className="text-amber-600">Tiba: {stats.peakReturn}</span>
                </div>
              </div>
-             <div className="min-h-[18px]"></div>
+             <div className="min-h-[14px]"></div>
           </div>
         </div>
       </div>
